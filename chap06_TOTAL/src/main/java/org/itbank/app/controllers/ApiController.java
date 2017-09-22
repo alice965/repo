@@ -6,6 +6,10 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -20,6 +24,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ApiController {
 	@Autowired
 	ObjectMapper mapper;
+	
+	@RequestMapping("/03")
+	public void api_03Handle() {
+		System.out.println("/api/03");
+		RestTemplate template = new RestTemplate();
+		String resp = template.getForObject("http://openapi.seoul.go.kr:8088/6f66654142746530383254796c4859/xml/SearchSTNBySubwayLineService/1/{a}/{b}/", 
+						String.class, 5, "1"); 
+		//JSON : ObjectMApper로 객체변환해서 사용하면 됨.
+		//XML로만 데이터를 주는 곳도 존재함. XML 분석 라이브러리를 이용해서 해결 해보자.
+		//JSOUP
+		System.out.println(resp);
+		Document doc = Jsoup.parse(resp); // import 조심.. jsoup으로 가져와야 함.
+		Elements elms = doc.getElementsByTag("row"); //배열로 들어옴.
+		for(Element e: elms) {
+			String scd = e.getElementsByTag("STATION_CD").get(0).ownText();
+			String snm = e.getElementsByTag("STATION_NM").get(0).ownText();
+			String ln = e.getElementsByTag("LINE_NUM").get(0).ownText();
+			System.out.println(scd + "/" + snm + "/"+ln);
+		}
+	}
 	
 	@RequestMapping("/01")
 	public void api_01Handle() {
