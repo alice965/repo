@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+	<insert id="addBasic">
+		insert into member(id, pass, email) values (#{id},#{pass}, #{email})		
+	</insert>
+	<insert id="addDetail">
+		insert into member_detail(id) values (#{id})		
+	</insert>
+	<insert id="addProfile">
+		insert into profile values(profile_seq.nextval, #{id}, #{uri}, sysdate)
+	</insert>
+	<select id="latestProfile" resultType="java.util.HashMap">
+		select * from(select * from profile where id = #{id} order by regdate desc)where rownum=1
+	</select>
+	
+	<select id="listProfile" resultType="java.util.HashMap">
+		select * from profile where id= #{id} order by regdate desc
+	</select>
+	<select id="checkByIdmailAndPass" resultType="java.lang.Integer">
+		select count(*) from member where (id=#{idmail} or email=#{idmail})
+			 and pass=#{pass, jdbcType=VARCHAR }
+	</select>
+	<select id="readOneByIdOrEmail" resultType="java.util.HashMap">
+		select m.*, d.* from member m join member_detail d on m.id = d.id
+			where (m.id=#{idmail} or m.email=#{idmail})
+	</select>
+	<select id="readOneById" resultType="java.util.HashMap">
+		select m.*, d.* from member m join member_detail d on m.id = d.id
+			where m.id=#{id}
+	</select>
+	<update id="updateOneDetail">
+		update detail set name=#{name}, gender=#{gender}, birth=#{birth}, address=#{address} 
+			where id=#{id} 
+	</update>
+	
+	<select id="list" resultType="java.util.HashMap">
+		select m.*, p.* from member m left join
+   			 (select id, max(URI) as URI from profile group by id) p on m.id = p.id
+		order by m.id asc
+	</select>
+	<select id="listPage" resultType="java.util.HashMap">
+		select * from (
+			select rownum as r, t.* from(
+				select m.*, p.URI  from member m left join
+   					(select id, max(URI) as URI from profile group by id) p on m.id = p.id
+					order by m.id asc
+			) t 
+		) where r between #{start} and #{end }
+	</select>
+	<select id="countListPage" resultType="java.lang.Integer">
+		select count(*) as cnt from member m left join
+   			(select id, max(URI) as URI from profile group by id) p on m.id = p.id
+				order by m.id asc
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
