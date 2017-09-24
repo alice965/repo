@@ -91,7 +91,7 @@ input, textarea, button {
 				}
 				document.getElementById("bidlist").innerHTML = html;
 			}
-		}
+		};
 		xhr.send();
 	}
 	getList();

@@ -10,6 +10,9 @@ input, button {
 b {
 	font-size: 12pt;
 }
+.keep {
+	width:10%;
+}
 </style>
 <div align="center">
 	<div style="width: 340px;" align="left">
@@ -25,10 +28,30 @@ b {
 			<p>
 				<b>PASS</b><br /> <input type="password" name="pass" required />
 			</p>
+			<p>
+			<input type="checkbox" class="keep" name="keep" value="keep" id="keep1" onchange ="javascript:keeplog()" />
+			 Keep Login
+			</p>
 			<button id="sbt" type="submit" style="">L O G I N</button>
 		</form>
 	</div>
 	<div style="width: 340px; margin-top: 20px;" align="center">
 		New to HUB? <a href="/join">Create an account.</a>
 	</div>
+	<br>
+	<div>
+		<a href="/findid">Find ID </a>  | <a href="/findpw">Find PW </a> 
+	</div>
 </div>
+<script>
+   function keeplog(){
+      var loginchk=window.confirm("로그인 유지시 공공장소에서 개인정보 유출의 가능성이 있습니다 \n 그래도 로그인을 유지하시겠습니까?");
+      if(loginchk==true){
+         document.getElementById("keep1").checked=true;         
+      }else{
+         document.getElementById("keep1").checked=false;   
+         console.log(document.getElementById("keep1").checked);
+      }
+   }
+
+</script>

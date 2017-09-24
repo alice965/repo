@@ -80,16 +80,61 @@ public class MemberController {
 
 	@GetMapping("/info")
 	public String infoHandle(Model model, HttpSession session) {
-		Map map = (Map) session.getAttribute("auth");
+		String id = (String) session.getAttribute("auth_id");
+		HashMap map = memberDao.readOneById(id);
 		model.addAttribute("section", "my/info");
+		model.addAttribute("map", map);
 		return "t_expr";
 	}
 
-	@PostMapping("/info")
-	public String infoPostHandle() {
+	@GetMapping("/edit_info")
+	public String infoGetHandle(Model model, HttpSession session) {
+		String id = (String) session.getAttribute("auth_id");
+		HashMap map = memberDao.readOneById(id);
+		model.addAttribute("section", "my/edit_info");
+		model.addAttribute("map", map);
 		return "t_expr";
 	}
-	
+	@PostMapping("/edit_info")
+	public String infoPostHandle(@RequestParam Map param, Model model, HttpSession session) {
+		String id = (String) session.getAttribute("auth_id");
+		param.put("id", id);
+		System.out.println("파람은?"+param);
+		int r = memberDao.updateInfo(param);
+		//System.out.println("업데이트 일어난");
+		if(r==1) {
+			model.addAttribute("section", "my/edit_info");
+			return "t_expr";
+		}
+		return "t_expr";
+	}
+	@GetMapping("/dropout")
+	public String dropoutGetHandle(Model model, HttpSession session) {
+		//String id = (String) session.getAttribute("auth_id");
+		//HashMap map = memberDao.dropMember(id);
+		model.addAttribute("section", "/my/dropout");
+		return "t_expr";
+	}
+	@PostMapping("/dropout")
+	public String dropoutPostHandle(@RequestParam Map param, Model model, HttpSession session) {
+		String id = (String) session.getAttribute("auth_id");
+		param.put("id", id);
+		int cnt = session.getAttribute("limit")==null? 0: (int)(session.getAttribute("limit"));
+		System.out.println("탈퇴..파람은?"+param);
+		int r = memberDao.dropMember(param);
+		if(r==1) {
+			model.addAttribute("section", "/");
+			session.invalidate();
+			return "t_expr";
+		}else {
+			cnt++;	  //틀린 횟수 올려주고
+			session.setAttribute("limit", cnt);
+			if(cnt == 3) {
+				session.invalidate();
+			}
+		}
+		return "t_expr";
+	}
 	@RequestMapping("/list")
 	public ModelAndView boardListHandle(@RequestParam(name="page", defaultValue="1") int page ) 
 						throws SQLException {

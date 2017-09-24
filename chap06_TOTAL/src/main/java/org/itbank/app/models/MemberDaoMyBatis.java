@@ -53,4 +53,12 @@ public class MemberDaoMyBatis {
 	public int countListPage() {
 		return sql.selectOne("member.countListPage");
 	}
+	
+	public int updateInfo(Map map) {
+		return sql.update("member.updateInfo", map);
+	}
+	public int dropMember(Map map) {
+		return sql.update("member.dropMember", map);
+	}
+	
 }

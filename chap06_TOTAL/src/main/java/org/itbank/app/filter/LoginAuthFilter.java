@@ -15,7 +15,7 @@ public class LoginAuthFilter extends HttpFilter  {
 	@Override
 	protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		if(request.getSession().getAttribute("auth") == null) {
+		if(request.getSession().getAttribute("auth_id") == null) {
 			String uri = request.getRequestURI();
 			if(uri.startsWith("/my") ) {
 				String red= request.getRequestURI();

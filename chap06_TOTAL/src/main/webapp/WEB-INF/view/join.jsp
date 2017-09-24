@@ -32,9 +32,13 @@ b {
 				<button type="button"  id="sendVal" style="width: 30%;">인증번호발송</button><br>
 			</p>
 			<p id="validation_view" style="display:none">
-				<b>Validation</b><small id="left"	 style="color: red; font-weight: bold"></small><br /> 
-				
-				<br><input type="text" id="vnum" name="vnum"  style="width: 40%;" required />
+				<b>Validation</b> 
+					<!-- 인증번호 유효시간 표시 -->
+					<small>인증번호 유효시간</small>
+					<small id="left"  style="color: red; font-weight: bold"></small><br /> 
+				<br>
+				<!-- 인증번호 입력 -->
+				<input type="text" id="vnum" name="vnum"  style="width: 40%;" required />
 				<button type="button"  id="vldbtn" style="width: 30%;">확인</button><br>
 				<span id="chk_validate"></span>
 				
@@ -60,6 +64,8 @@ b {
 				if(obj.result == 1){
 					window.alert("입력하신 이메일로 인증번호가 발송되었습니다.");
 					document.getElementById("validation_view").style.display = "";
+					tot = 180;
+					time = setInterval(limit, 1000);
 					}else{
 						window.alert("이메일 전송 오류가 발생.");	
 					}
@@ -86,14 +92,15 @@ b {
 		}
 		
 	};
+	//인증번호 입력시간
 	var limit = function() {
 		var m = Math.floor(tot / 60);
 		var s = tot % 60;
-		console.log(m + "/" + s);
+		//console.log(m + "/" + s);
 		document.getElementById("left").innerHTML = m + ":"
 				+ (s < 10 ? "0" + s : s);
 		tot--;
-		console.log(tot);
+		//console.log(tot);
 		if(tot<0) {
 			window.alert("인증시간이 초과되었습니다.");
 			clearInterval(time);

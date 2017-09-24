@@ -1,37 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="EUC-KR"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div>
-	<div>	
-		<h3>╪╪╨на╓╨╦</h3>
-		<form action="/my/info" method="post">
+	<div align="center">	
+		<h3>My Info</h3>
 			<p>
-				<b>NAME</b><br /> <input type="text"
-					value="<c:if test="${map.NAME != null}">  ${map.NAME} </c:if> " name="name" required />
+				<b>NAME</b><br/>
+					<c:if test="${map.NAME eq null }">
+						<small> Л·┘К═╔К░° Л═∙КЁ╢Й╟─ Л≈├Л┼╣К▀┬К▀╓.</small>
+				 	</c:if>
+					${map.NAME} <br/>
 			</p>
 			<p>
-				<b>GENDER</b><br /> 
-					<input type="radio" name="gender" value="Ё╡"
-					<c:if test="${map.GENDER eq 'Ё╡'}">  "checked" </c:if>
-					required />Ё╡ 
-					
-					<input
-					type="radio" name="gender" value="©╘"
-					<c:if test="${map.GENDER eq '©╘'}">  "checked" </c:if>
-					required />©╘ 
+				<b>GENDER</b><br/>
+					<c:if test="${map.GENDER eq null }">
+						<small> Л·┘К═╔К░° Л═∙КЁ╢Й╟─ Л≈├Л┼╣К▀┬К▀╓.</small>
+				 	</c:if>
+					${map.GENDER }<br /> 
 			</p>
 			<p>
-				<b>BIRTH</b><br /> <select name="birth">
-					
-					<option value="1" >2017</option>
-					
-				</select>
+				<b>BIRTH</b><br/>
+					<c:if test="${map.BIRTH eq null }">
+						<small> Л·┘К═╔К░° Л═∙КЁ╢Й╟─ Л≈├Л┼╣К▀┬К▀╓.</small>
+				 	</c:if>
+					${map.BIRTH}<br/> 
 			</p>
 			<p>
-				<b>ADDRESS</b><br /> <input type="text" name="address" size="50"
-					value="<c:if test="${map.ADDRESS != null}">  ${map.ADDRESS} </c:if> " name="address" required />
+				<b>ADDRESS</b><br/> 
+					<c:if test="${map.ADDRESS eq null }">
+						<small> Л·┘К═╔К░° Л═∙КЁ╢Й╟─ Л≈├Л┼╣К▀┬К▀╓.</small>
+				 	</c:if>
+				
+					${map.ADDRESS}<br /> 
 			</p>
 			
-			<button type="submit">а╓╨╦╨╞╟Ф</button>
-		</form>
+			<button type="button" id="edit" >Л═∙КЁ╢КЁ─Й╡╫</button>
+			<button type="button" id="drop" >М ▄Л⌡░М┐┬М┤╢</button>
 	</div>
+	<script>
+		document.getElementById("edit").onclick=function(){
+			location.href='/my/edit_info'
+		}
+		document.getElementById("drop").onclick=function(){
+			location.href='/my/dropout'
+		}
+	
+	
+	</script>
 </div>

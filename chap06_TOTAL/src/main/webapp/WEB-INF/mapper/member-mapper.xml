@@ -30,10 +30,13 @@
 		select m.*, d.* from member m join member_detail d on m.id = d.id
 			where m.id=#{id}
 	</select>
-	<update id="updateOneDetail">
-		update detail set name=#{name}, gender=#{gender}, birth=#{birth}, address=#{address} 
+	<update id="updateInfo" >
+		update member_detail set name=#{name}, gender=#{gender}, birth=#{birth}, address=#{address} 
 			where id=#{id} 
 	</update>
+	<delete id="dropMember">
+		delete from member where id=#{id} and pass=#{pass}
+	</delete>
 	
 	<select id="list" resultType="java.util.HashMap">
 		select m.*, p.* from member m left join

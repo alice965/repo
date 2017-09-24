@@ -42,7 +42,6 @@ th, td {
 					</td>
 					<td>${obj.ID }</td>
 					<td>${obj.EMAIL }</td>
-					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

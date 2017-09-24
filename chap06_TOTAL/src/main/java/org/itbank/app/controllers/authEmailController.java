@@ -58,12 +58,13 @@ public class authEmailController {
 				msg.setSubject("회원가입 인증 메일");
 				
 				//htmlTemplate
-				RestTemplate tm = new RestTemplate();
-				// String text = tm.getForObject("/auth/mail", String.class);
+				//RestTemplate tm = new RestTemplate();
+				//String text = tm.getForObject("/auth/validateMail", String.class);
+				//System.out.println(text);
 				
 				//Text
 				String text ="<h1>이메일 인증</h1>";
-				text+=auth_str+"<>"; //uuid 인증번호 출력
+				text+=auth_str+"<br>"; //uuid 인증번호 출력
 				text += "<a href=\"http://192.168.10.78\">사이트 이동</a>";
 				msg.setText(text, "UTF-8", "html");
 				//From
