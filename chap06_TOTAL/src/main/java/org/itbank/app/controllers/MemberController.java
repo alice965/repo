@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.itbank.app.models.MemberDaoMyBatis;
@@ -110,21 +112,43 @@ public class MemberController {
 	}
 	@GetMapping("/dropout")
 	public String dropoutGetHandle(Model model, HttpSession session) {
-		//String id = (String) session.getAttribute("auth_id");
-		//HashMap map = memberDao.dropMember(id);
 		model.addAttribute("section", "/my/dropout");
 		return "t_expr";
 	}
+	
 	@PostMapping("/dropout")
-	public String dropoutPostHandle(@RequestParam Map param, Model model, HttpSession session) {
+	public String dropoutPostHandle(@RequestParam Map param, Model model, HttpSession session, 
+						HttpServletRequest request, HttpServletResponse response) {
+
+		int cnt = session.getAttribute("limit")==null? 0: (int)(session.getAttribute("limit"));
+		
 		String id = (String) session.getAttribute("auth_id");
 		param.put("id", id);
-		int cnt = session.getAttribute("limit")==null? 0: (int)(session.getAttribute("limit"));
-		System.out.println("Å»Åð..ÆÄ¶÷Àº?"+param);
+		
 		int r = memberDao.dropMember(param);
+		
 		if(r==1) {
-			model.addAttribute("section", "/");
+			model.addAttribute("section", "/index");
+			//¼¼¼Ç ¾ø¾Ö°í
 			session.invalidate();
+			//ÄíÅ° »èÁ¦
+			Cookie[] ar= request.getCookies();
+			Map<String, String> ckmap = new HashMap<>();
+			if(ar != null) {
+				 for(Cookie c:ar) {
+					 ckmap.put(c.getName(), c.getValue());
+				 }
+				 
+				 if(ckmap.containsKey("auth_id")) {
+					Cookie c = new Cookie("auth_id","1");
+					c.setMaxAge(0);
+					c.setPath("/");
+					response.addCookie(c);
+					
+				 }
+			}else {
+				 System.out.println("ÄíÅ°»èÁ¦¾ÈµÊ....");
+			}
 			return "t_expr";
 		}else {
 			cnt++;	  //Æ²¸° È½¼ö ¿Ã·ÁÁÖ°í
@@ -132,9 +156,10 @@ public class MemberController {
 			if(cnt == 3) {
 				session.invalidate();
 			}
-		}
-		return "t_expr";
+		
 	}
+	return "t_expr";
+}
 	@RequestMapping("/list")
 	public ModelAndView boardListHandle(@RequestParam(name="page", defaultValue="1") int page ) 
 						throws SQLException {

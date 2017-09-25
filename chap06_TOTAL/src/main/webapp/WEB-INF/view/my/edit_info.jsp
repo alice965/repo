@@ -32,14 +32,11 @@
 			</p>
 			<p>
 				<b>BIRTH</b><br/>
-				<c:choose>
-					<c:when test="${map.BIRTH eq null }">
-						<input type="text" name="birth"/>
-				 	</c:when>
-				 	<c:otherwise>
-				 		<input type="text" name="birth" value="${map.BIRTH}"/>
-					</c:otherwise>	
-				</c:choose>
+				 		<select name="birth">
+				            <c:forEach var="i" begin="1900" end="2017" step="1">
+				               <option value="${i}" ${i eq map.BIRTH ? 'selected' : '' }>${i }년생</option> 
+				            </c:forEach>
+			            </select>
 			</p>
 			<p>
 				<b>ADDRESS</b><br/> 
